@@ -8,7 +8,7 @@ use SimpleXMLElement;
 use App\Article;
 use App\ArticleImage;
 
-class HomeController extends Controller {
+class ArticleController extends Controller {
 
     /**
      * Create a new controller instance.

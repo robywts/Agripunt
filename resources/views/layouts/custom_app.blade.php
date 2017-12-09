@@ -9,7 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Sample page</title>
+        <title>Agripunt</title>
         <!-- Bootstrap core CSS-->
         <link href="{{ asset('custom_style/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <!-- Custom fonts for this template-->
@@ -31,14 +31,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item @if(isset($dashboard_active)) {{  $dashboard_active }} @endif" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="{{ route('dashboard') }}">
                             <i class="fa fa-fw fa-dashboard"></i>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item " data-toggle="tooltip" data-placement="right" title="Dashboard">
-                        <a class="nav-link" href="manage_users.html">
+                    <li class="nav-item @if(isset($users_active)) {{  $users_active }} @endif" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                        <a class="nav-link" href="{{ route('users') }}">
                             <i class="fa fa-fw fa-users"></i>
                             <span class="nav-link-text">Manage Users</span>
                         </a>
@@ -161,26 +161,6 @@
         </nav>
         <div class="content-wrapper">
             <div class="container-fluid">
-
-                <div class="col-md-12 ">
-                    <div class="row">
-                        <div class="page-title">
-                            <div class="page-title">
-                                Dashboard
-                            </div>
-                        </div>
-                        <div class="bread-crumbs"><!-- Breadcrumbs-->
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item active">
-                                    <a href="#">Dashboard</a>
-                                </li>
-
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-
-
 
                 @yield('content')
             </div>

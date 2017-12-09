@@ -36,4 +36,9 @@ Route::group(['prefix' => 'web'], function ($id) {
     Route::get('rssfeed/{id}', ['as' => 'edit-rssfeed', 'uses' => 'RssfeedController@getRssfeedById']);
     Route::patch('rssfeed/{id}', ['as' => 'edit-rssfeed', 'uses' => 'RssfeedController@updateRssfeed']);
     Route::post('rssfeed', ['as' => 'add-rssfeed', 'uses' => 'RssfeedController@addRssfeed']);
+    
+    //users
+    Route::get('users', ['as' => 'users', 'uses' => 'UserController@index']);
+    Route::get('get-users', ['as' => 'users.data', 'uses' => 'UserController@getAllUsers']);
+    
 });

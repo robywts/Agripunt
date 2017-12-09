@@ -2,6 +2,23 @@
 @extends('layouts.custom_app')
 
 @section('content')
+ <div class="col-md-12 ">
+                    <div class="row">
+                        <div class="page-title">
+                            <div class="page-title">
+                                Dashboard
+                            </div>
+                        </div>
+                        <div class="bread-crumbs"><!-- Breadcrumbs-->
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Dashboard</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
                 <!-- Example DataTables Card-->
                 <div class="col-md-12">
                     <div class="row">
