@@ -17,8 +17,8 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'DashboardController@index')->name('dashboard');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('/rss', 'HomeController@test');
 Route::get('/art-user', function () {
     return view('welcome');

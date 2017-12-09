@@ -25,7 +25,7 @@ use AuthenticatesUsers;
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -45,7 +45,7 @@ use AuthenticatesUsers;
      */
     protected function authenticated(Request $request, $user) {
         if ($user->type == 1) {// do your margic here
-            return redirect()->route('home');
+            return redirect()->route('dashboard');
         }
 
         return redirect('/art-user');
