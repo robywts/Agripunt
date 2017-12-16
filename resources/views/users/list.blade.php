@@ -17,7 +17,12 @@
         </div>
     </div>
 </div>
-
+<!-- if updation success, they will show here -->
+@if ($message = Session::get('success'))
+<div class="alert alert-success">
+    <p>{{ $message }}</p>
+</div>
+@endif
 <!-- Example DataTables Card-->
 <div class="card mb-3">
 
@@ -111,6 +116,7 @@ $(function () {
         }
     });
 });
+
 </script>
 
 @endsection

@@ -1,5 +1,4 @@
 <?php
-
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -36,9 +35,14 @@ Route::group(['prefix' => 'web'], function ($id) {
     Route::get('rssfeed/{id}', ['as' => 'edit-rssfeed', 'uses' => 'RssfeedController@getRssfeedById']);
     Route::patch('rssfeed/{id}', ['as' => 'edit-rssfeed', 'uses' => 'RssfeedController@updateRssfeed']);
     Route::post('rssfeed', ['as' => 'add-rssfeed', 'uses' => 'RssfeedController@addRssfeed']);
-    
+
     //users
     Route::get('users', ['as' => 'users', 'uses' => 'UserController@index']);
     Route::get('get-users', ['as' => 'users.data', 'uses' => 'UserController@getAllUsers']);
+    Route::get('user/edit/{id}', ['as' => 'users.edit', 'uses' => 'UserController@editUsers']);
+    Route::patch('user/edit/{id}', ['as' => 'users.update', 'uses' => 'UserController@updateUser']);
+    Route::post('user/delete/{id}', ['as' => 'users.delete', 'uses' => 'UserController@destroyUser']);
     
+    Route::get('user/create', ['as' => 'users.add', 'uses' => 'UserController@createUser']);
+    Route::post('user/create', ['as' => 'users.store', 'uses' => 'UserController@storeUser']);
 });

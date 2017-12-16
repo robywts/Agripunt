@@ -106,7 +106,7 @@
 
                     </li>
                     <li class="mr15">
-                        <a class="btn btn-primary btn-block" href="invite_users.html">Invite Users</a>
+                        <a class="btn btn-primary btn-block" href="{{ route('users.add') }}">Invite Users</a>
                     </li>
                     <li class="">
                    

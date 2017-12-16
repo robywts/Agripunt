@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
+use App\User;
 
 class UserController extends Controller
 {
@@ -25,7 +26,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users')->with('users_active', 'active');
+        return view('users.list')->with('users_active', 'active');
     }
 
     /**
@@ -41,9 +42,13 @@ class UserController extends Controller
 //                        $status = 1;
 //                        $query->where('users.status', '=', $status);
 //                    }
-            $users = DB::table('users')->select('users.name', 'users.email', 'users.posts', 'users.status')->where('users.type', 2);
+            $users = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.posts', 'users.status')->where('users.type', 2);
             return Datatables::of($users)->addColumn('action', function ($user) {
-                    return '<a href="#" class="btn edit ">EDIT</a>&nbsp;<a href="#" class="btn delete">DELETE</a>';
+                    return '<form action="' . route('users.delete', $user->id) . '" method="POST">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <a href="user/edit/' . $user->id . '" class="btn edit ">EDIT</a>&nbsp; <button onclick="return confirm(\'Are you sure want to delete this User?\')" type="submit" class="btn delete">
+                    Delete</button>
+                    </form>';
                 })->make(true);
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -51,20 +56,98 @@ class UserController extends Controller
     }
 
     /**
-     * Function to get rssfeed url datas by Id
-     * 
-     * @params $id
-     * @return json response
+     * Show the form for editing the specified user.
+     *
+     * @param  int  $id
+     * @return Response
      */
-    public function getRssfeedById($id)
+    public function editUsers($id)
     {
         try {
-            $update_rss_feeds = DB::table('rssfeed')
+            $user = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.status')
                     ->where('id', $id)->first();
-            return \Response::json($update_rss_feeds);
+            return view('users.edit')->with('user', $user)->with('users_active', 'active');
+//           / return \Response::json($user);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Update the specified user in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function updateUser(Request $request, $id)
+    {
+        request()->validate([
+
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'status' => 'required',
+            ], [
+
+            'name.required' => trans('custom_validation.user_name_required'),
+            'email.required' => trans('custom_validation.user_email_required'),
+            'email.email' => trans('custom_validation.user_email_valid'),
+            'email.unique' => trans('custom_validation.user_email_unique'),
+            'status.required' => trans('custom_validation.user_status_required'),
+        ]);
+        User::find($id)->update($request->all());
+        return redirect()->route('users.edit', ['id' => $id])
+                ->with('success', trans('custom_validation.user_update_success'));
+    }
+
+    /**
+     * Show the form for creating a new user.
+     *
+     * @return Response
+     */
+    public function createUser()
+    {
+        // load the create form (app/views/nerds/create.blade.php)
+        return view('users.add')->with('users_active', 'active');
+        ;
+    }
+
+    /**
+     * Store a newly created user in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeUser(Request $request)
+    {
+        request()->validate([
+
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            ], [
+
+            'name.required' => trans('custom_validation.user_name_required'),
+            'email.required' => trans('custom_validation.user_email_required'),
+            'email.email' => trans('custom_validation.user_email_valid'),
+            'email.unique' => trans('custom_validation.user_email_unique'),
+        ]);
+        $input = $request->all();
+        $input['password'] = bcrypt(config('settings.user_pwd'));
+        User::create($input);
+        return redirect()->route('users.add')
+                ->with('success', trans('custom_validation.user_create_success'));
+    }
+
+    /**
+     * Remove the specified user from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyUser($id)
+    {
+        User::find($id)->delete();
+        return redirect()->route('users')
+                ->with('success', trans('custom_validation.user_delete_success'));
     }
 
     /**
