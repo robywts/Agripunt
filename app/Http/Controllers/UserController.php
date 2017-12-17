@@ -37,7 +37,7 @@ class UserController extends Controller
     public function getAllUsers()
     {
         try {
-            $requestData = $_REQUEST;
+            //$requestData = $_REQUEST;
 //            if (isset($requestData['columns'][2]['search']['value'])) {
 //                        $status = 1;
 //                        $query->where('users.status', '=', $status);

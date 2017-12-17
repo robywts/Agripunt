@@ -42,7 +42,10 @@ Route::group(['prefix' => 'web'], function ($id) {
     Route::get('user/edit/{id}', ['as' => 'users.edit', 'uses' => 'UserController@editUsers']);
     Route::patch('user/edit/{id}', ['as' => 'users.update', 'uses' => 'UserController@updateUser']);
     Route::post('user/delete/{id}', ['as' => 'users.delete', 'uses' => 'UserController@destroyUser']);
-    
     Route::get('user/create', ['as' => 'users.add', 'uses' => 'UserController@createUser']);
     Route::post('user/create', ['as' => 'users.store', 'uses' => 'UserController@storeUser']);
+    
+    //articles
+    Route::get('articles', ['as' => 'articles', 'uses' => 'ArticleController@index']);
+    Route::get('get-articles/{user_id}', ['as' => 'articles.data', 'uses' => 'ArticleController@getAllArticles']);
 });

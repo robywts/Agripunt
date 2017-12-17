@@ -1,22 +1,23 @@
-<?php
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SimpleXMLElement;
 use App\Article;
 use App\ArticleImage;
+use DataTables;
 
-class ArticleController extends Controller {
+class ArticleController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-//$this->middleware('auth');
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
     /**
@@ -24,11 +25,41 @@ class ArticleController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('home');
     }
 
-    public function test() {
+    /**
+     * Function to get all articles
+     * 
+     * @return json response
+     */
+    public function getAllArticles($user_id)
+    {
+        try {
+            //   $requestData = $_REQUEST;
+//            if (isset($requestData['columns'][2]['search']['value'])) {
+//                        $status = 1;
+//                        $query->where('users.status', '=', $status);
+//                    }
+            $articles = DB::table('article')->leftJoin('article_subject', 'article_subject.article_ID', '=', 'article.id')->leftJoin('subject', 'article_subject.subject_ID', '=', 'subject.id')
+                    ->leftJoin('article_company', 'article_company.article_ID', '=', 'article.id')->leftJoin('company', 'article_company.company_ID', '=', 'company.id')->leftJoin('article_file', 'article_file.article_ID', '=', 'article.id')->leftJoin('file', 'article_file.file_ID', '=', 'file.id')->select('article.id', 'article.article_title', 'article.article_comment', 'company.company_name', 'subject.subject_name', 'file.file_name as topic')->where('article.user_id', $user_id)->get();
+
+            return Datatables::of($articles)->addColumn('action', function ($article) {
+                    return '<form action="' . route('users.delete', $article->id) . '" method="POST">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <a href="user/edit/' . $article->id . '" class="btn edit ">EDIT</a>&nbsp; <button onclick="return confirm(\'Are you sure want to delete this User?\')" type="submit" class="btn delete">
+                    Delete</button>
+                    </form>';
+                })->make(true);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function test()
+    {
         try {
             $feed_urls = DB::table('rssfeed')->select('id', 'rss_url')->get();
             foreach ($feed_urls as $feed_url) {
@@ -59,5 +90,4 @@ class ArticleController extends Controller {
             return $e->getMessage();
         }
     }
-
 }

@@ -90,7 +90,7 @@ $(function () {
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
         initComplete: function () {
-            $('.dataTables_filter input[type="search"]').attr('placeholder', 'Search Users').css(
+            $('.dataTables_filter input[type="search"]').attr('placeholder', 'Search User Data').css(
                     {}
             );
             var r = $('#users-table tfoot tr');

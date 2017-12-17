@@ -80,22 +80,15 @@
                                             <option value="1" @if(($user->status or old('status')) == '1') selected="selected" @endif>Active</option>
                                         </select>-->
                     {{ Form::label('status', 'Choose Status',['class' => 'field-title']) }}
-                    {{ Form::select('status', array('' => 'Choose Status', '0' => 'In Active', '1' => 'Active'), null, array('class' => 'common-input', 'placeholder' => 'User Status')) }}
+                    {{ Form::select('status', array('' => 'Choose Status', '0' => 'Inactive', '1' => 'Active'), null, array('class' => 'common-input', 'placeholder' => 'User Status')) }}
 
                 </div>
 
                 <div class="">
                     <label class="field-title border-bottom pb10">Posts</label>
                     <div class="table-responsive">
-                        <div class="col-md-6 float-right pr0 mb15">
-                            <div class="col-sm-12 col-md-12 float-right text-right pr0">
 
-
-                                <div id="dataTables-example_filter" class="dataTables_filter table-top-search"><input type="search" class="form-control form-control-sm" placeholder="Search Posts" aria-controls="dataTables-example"></div>
-                            </div>
-
-                        </div>
-                        <table class="table table-bordered" id="dataTables-example2" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="article-table" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Post Name</th>                 
@@ -104,86 +97,22 @@
                                     <th>Companies</th>
                                     <th>Comments</th>
                                     <th>Actions</th>
-
-
                                 </tr>
 
                             </thead>
-                            <tr class="table-search">
-                                <td><label><input type="search" class="form-control form-control-sm" placeholder="Search Post" aria-controls="dataTables-example"></label></td>
-                                <td><label><input type="search" class="form-control form-control-sm" placeholder="Search by Category" aria-controls="dataTables-example"></label></td>
-                                <td><label><input type="search" class="form-control form-control-sm" placeholder="Search by Topic" aria-controls="dataTables-example"></label></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-
-                            </tr>
-                            <tbody>
-
-                                <tr>
-                                    <td>Agriculture...</td>
-
-                                    <td>Poultry, Pigs</td>
-
-                                    <td>Poison in eggs, Poultry</td>
-                                    <td>ABC Ltd</td>
-                                    <td>2</td>
-                                    <td><a href="#" class="btn edit ">EDIT</a> <a href="#" class="btn delete">DELETE</a></td>
+                            <tfoot>
+                                <tr class="table-search">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
-                                <tr>
-                                    <td>Agriculture...</td>
-
-                                    <td>Poultry, Pigs</td>
-
-                                    <td>Poison in eggs, Poultry</td>
-                                    <td>ABC Ltd</td>
-                                    <td>2</td>
-                                    <td><a href="#" class="btn edit ">EDIT</a> <a href="#" class="btn delete">DELETE</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Agriculture...</td>
-
-                                    <td>Poultry, Pigs</td>
-
-                                    <td>Poison in eggs, Poultry</td>
-                                    <td>ABC Ltd</td>
-                                    <td>2</td>
-                                    <td><a href="#" class="btn edit ">EDIT</a> <a href="#" class="btn delete">DELETE</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Agriculture...</td>
-
-                                    <td>Poultry, Pigs</td>
-
-                                    <td>Poison in eggs, Poultry</td>
-                                    <td>ABC Ltd</td>
-                                    <td>2</td>
-                                    <td><a href="#" class="btn edit ">EDIT</a> <a href="#" class="btn delete">DELETE</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Agriculture...</td>
-
-                                    <td>Poultry, Pigs</td>
-
-                                    <td>Poison in eggs, Poultry</td>
-                                    <td>ABC Ltd</td>
-                                    <td>2</td>
-                                    <td><a href="#" class="btn edit ">EDIT</a> <a href="#" class="btn delete">DELETE</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Agriculture...</td>
-
-                                    <td>Poultry, Pigs</td>
-
-                                    <td>Poison in eggs, Poultry</td>
-                                    <td>ABC Ltd</td>
-                                    <td>2</td>
-                                    <td><a href="#" class="btn edit ">EDIT</a> <a href="#" class="btn delete">DELETE</a></td>
-                                </tr>
-
-
-                            </tbody>
+                            </tfoot>
                         </table>
+
+
                     </div>
                 </div>
 
@@ -202,22 +131,67 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function resetForm(editUsers)
-    {
-        var editUsers = document.getElementById(editUsers);
 
-        for (var i = 0; i < editUsers.elements.length; i++)
-        {
-            if (editUsers.elements[i].type == 'text' || editUsers.elements[i].type == 'select-one')
-            {
-                editUsers.elements[i].value = '';
-            }
-        }
-    }
-    setTimeout(function () {
-        $('#successMessage').fadeOut('slow');
-    }, 2000);
+<script src="{{ asset('custom_style/datatable/jquery-1.12.3.js') }}"></script>
+<script src="{{ asset('custom_style/datatable/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('custom_style/datatable/dataTables.bootstrap.min.js') }}"></script>
+<script>
+                        $(function () {
+                            var oTable = $('#article-table').DataTable({
+                                bProcessing: true,
+                                serverSide: true,
+                                /* sDom           : 'p', */
+                                // dom            : 'Bfrtip',
+                                ajax: {
+                                    url: '{!! route("articles.data", $user->id) !!}',
+                                    data: function (d) {
+
+                                    }
+                                },
+                                columns: [
+                                    {data: 'article_title', name: 'article_title'},
+                                    {data: 'subject_name', name: 'subject_name'},
+                                    {data: 'topic', name: 'topic'},
+                                    {data: 'company_name', name: 'company_name'},
+                                    {data: 'article_comment', name: 'article_comment'},
+                                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                                ],
+                                initComplete: function () {
+                                    $('.dataTables_filter input[type="search"]').attr('placeholder', 'Search Posts').css(
+                                            {}
+                                    );
+                                    var r = $('#article-table tfoot tr');
+
+                                    $('#article-table thead').append(r);
+
+                                    this.api().columns([0, 1, 2]).every(function () {
+                                        var column = this;
+                                        var input = document.createElement("input");
+
+                                        $(input).appendTo($(column.footer()).empty())
+                                                .on('change', function () {
+                                                    column.search($(this).val(), false, false, true).draw();
+                                                });
+                                    });
+                                }
+                            });
+                        });
+                        function resetForm(editUsers)
+                        {
+                            var editUsers = document.getElementById(editUsers);
+
+                            for (var i = 0; i < editUsers.elements.length; i++)
+                            {
+                                if (editUsers.elements[i].type == 'text' || editUsers.elements[i].type == 'select-one')
+                                {
+                                    editUsers.elements[i].value = '';
+                                }
+                            }
+                        }
+                        setTimeout(function () {
+                            $('#successMessage').fadeOut('slow');
+                        }, 2000);
 </script>
+
 
 @endsection
