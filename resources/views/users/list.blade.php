@@ -29,13 +29,6 @@
     <div class="card-body">
         <div class="table-responsive">     
 
-            <div class="col-md-6 float-right pr0 mb15">
-                <!--                <div class="col-sm-12 col-md-12 float-right text-right pr0">
-                                    <div id="dataTables-example_filter" class="dataTables_filter table-top-search"><input type="search" class="form-control form-control-sm" placeholder="Search Users" aria-controls="dataTables-example"></div><a class="btn btn-primary table-top-btn" href="invite_users.html">Invite Users</a>
-                                </div>-->
-
-            </div>
-
             <table class="table table-bordered" id="users-table" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -109,7 +102,7 @@ $(function () {
 //                    )
 
                 $(input).appendTo($(column.footer()).empty())
-                        .on('change', function () {
+                        .on('keyup', function () {
                             column.search($(this).val(), false, false, true).draw();
                         });
             });

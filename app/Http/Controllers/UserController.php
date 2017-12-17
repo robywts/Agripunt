@@ -67,7 +67,6 @@ class UserController extends Controller
             $user = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.status')
                     ->where('id', $id)->first();
             return view('users.edit')->with('user', $user)->with('users_active', 'active');
-//           / return \Response::json($user);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

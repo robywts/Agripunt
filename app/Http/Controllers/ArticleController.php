@@ -38,14 +38,13 @@ class ArticleController extends Controller
     public function getAllArticles($user_id)
     {
         try {
-            //   $requestData = $_REQUEST;
-//            if (isset($requestData['columns'][2]['search']['value'])) {
-//                        $status = 1;
-//                        $query->where('users.status', '=', $status);
-//                    }
-            $articles = DB::table('article')->leftJoin('article_subject', 'article_subject.article_ID', '=', 'article.id')->leftJoin('subject', 'article_subject.subject_ID', '=', 'subject.id')
-                    ->leftJoin('article_company', 'article_company.article_ID', '=', 'article.id')->leftJoin('company', 'article_company.company_ID', '=', 'company.id')->leftJoin('article_file', 'article_file.article_ID', '=', 'article.id')->leftJoin('file', 'article_file.file_ID', '=', 'file.id')->select('article.id', 'article.article_title', 'article.article_comment', 'company.company_name', 'subject.subject_name', 'file.file_name as topic')->where('article.user_id', $user_id)->get();
+//            $articles = DB::table('article')->leftJoin('article_subject', 'article_subject.article_ID', '=', 'article.id')->leftJoin('subject', 'article_subject.subject_ID', '=', 'subject.id')
+//                    ->leftJoin('article_company', 'article_company.article_ID', '=', 'article.id')->leftJoin('company', 'article_company.company_ID', '=', 'company.id')->leftJoin('article_file', 'article_file.article_ID', '=', 'article.id')->leftJoin('file', 'article_file.file_ID', '=', 'file.id')->select('article.id', 'article.article_title', 'article.article_comment', 'company.company_name', 'subject.subject_name', 'file.file_name as topic')->where('article.user_id', $user_id)->get();
 
+             $articles = DB::table('article')->leftJoin('article_subject', 'article_subject.article_ID', '=', 'article.id')->leftJoin('subject', 'article_subject.subject_ID', '=', 'subject.id')
+                    ->leftJoin('article_company', 'article_company.article_ID', '=', 'article.id')->leftJoin('company', 'article_company.company_ID', '=', 'company.id')->leftJoin('article_file', 'article_file.article_ID', '=', 'article.id')->leftJoin('file', 'article_file.file_ID', '=', 'file.id')->select('article.id', 'article.article_title', 'article.article_comment', DB::raw("(GROUP_CONCAT(DISTINCT company.company_name SEPARATOR ', ')) as `company_name`"), DB::raw("(GROUP_CONCAT(DISTINCT subject.subject_name SEPARATOR ', ')) as `subject_name`"), DB::raw("(GROUP_CONCAT(DISTINCT file.file_name SEPARATOR ', ')) as `topic`"))->groupBy('article.id')->where('article.user_id', $user_id)->get();
+
+            
             return Datatables::of($articles)->addColumn('action', function ($article) {
                     return '<form action="' . route('users.delete', $article->id) . '" method="POST">
                     <input type="hidden" name="_token" value="' . csrf_token() . '">

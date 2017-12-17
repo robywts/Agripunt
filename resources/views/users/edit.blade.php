@@ -35,7 +35,16 @@
 
 
         <div class="col-md-12 ">
-
+            <!-- if there are update errors, they will show here -->
+            @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <div class="row">
 
                 <div class="container pr0 mb15 pb10 border-bottom">
@@ -51,17 +60,6 @@
                     </div>
 
                 </div>
-
-                <!-- if there are update errors, they will show here -->
-                @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
                 {!! Form::model($user, array('method' => 'PATCH', 'route' => array('users.update', $user->id), 'id' => 'editUsers')) !!}
                 <div class="form-group">
                     {{ Form::label('name', 'Name of User',['class' => 'field-title']) }}
@@ -164,12 +162,12 @@
 
                                     $('#article-table thead').append(r);
 
-                                    this.api().columns([0, 1, 2]).every(function () {
+                                    this.api().columns([0, 1, 2, 3]).every(function () {
                                         var column = this;
                                         var input = document.createElement("input");
 
                                         $(input).appendTo($(column.footer()).empty())
-                                                .on('change', function () {
+                                                .on('keyup', function () {
                                                     column.search($(this).val(), false, false, true).draw();
                                                 });
                                     });
