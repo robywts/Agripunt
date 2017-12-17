@@ -19,7 +19,7 @@
 </div>
 <!-- if updation success, they will show here -->
 @if ($message = Session::get('success'))
-<div class="alert alert-success">
+<div class="alert alert-success" id="successMessage">
     <p>{{ $message }}</p>
 </div>
 @endif
@@ -109,7 +109,9 @@ $(function () {
         }
     });
 });
-
+ setTimeout(function () {
+                            $('#successMessage').fadeOut('slow');
+                        }, 2000);
 </script>
 
 @endsection

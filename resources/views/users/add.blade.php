@@ -13,7 +13,7 @@
         <div class="bread-crumbs"><!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="manage_users.html">Manage Users</a>
+                    <a href="{{ route('users') }}">Manage Users</a>
                 </li>
                 <li class="breadcrumb-item active">
                     Invite Users
